@@ -1,0 +1,25 @@
+{
+  "name": "delete",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "panwar2001",
+  "type": "commonjs",
+  "main": "handler.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "node --watch -r ts-node/register handler.ts"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.13.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.758.0",
+    "@aws-sdk/lib-dynamodb": "^3.758.0",
+    "esbuild": "^0.25.0"
+  }
+}

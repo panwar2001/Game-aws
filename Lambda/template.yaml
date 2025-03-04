@@ -1,0 +1,136 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Backend
+
+  Sample SAM Template for Backend
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  # This is an API gateway associated with the getByIdFunction and putItemFunctions
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'OPTIONS, POST, GET, PUT, DELETE'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'*'" #DO NOT USE THIS VALUE IN PRODUCTION - https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html
+
+
+
+  getAllItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get/
+      Handler: index.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateItem:
+          Type: Api
+          Properties:
+            Path: /get
+            Method: GET
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - index.ts
+
+
+  insertItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: insert/
+      Handler: index.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateItem:
+          Type: Api
+          Properties:
+            Path: /insert
+            Method: POST
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - index.ts
+
+  updateItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: update/
+      Handler: index.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateItem:
+          Type: Api
+          Properties:
+            Path: /update
+            Method: PUT
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - index.ts
+
+
+  deleteItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: delete/
+      Handler: index.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateItem:
+          Type: Api
+          Properties:
+            Path: /delete
+            Method: DELETE
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - index.ts
+
+
+Outputs:
+  CreateItemApi:
+    Description: "API Gateway endpoint URL for Create Item function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/create/"
+
+  ReadItemApi:
+    Description: "API Gateway endpoint URL for Read Item function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/read/"
+
+  UpdateItemApi:
+    Description: "API Gateway endpoint URL for Update Item function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/update/"
+
+  DeleteItemApi:
+    Description: "API Gateway endpoint URL for Delete Item function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/delete/"
