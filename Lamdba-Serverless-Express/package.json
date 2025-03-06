@@ -1,0 +1,33 @@
+{
+  "name": "handlers",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "panwar2001",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.9",
+    "@vendia/serverless-express": "^4.12.6",
+    "del": "^8.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "gulp": "^5.0.0",
+    "gulp-install": "^1.1.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "gulp-zip": "^6.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.758.0",
+    "@aws-sdk/lib-dynamodb": "^3.758.0",
+    "esbuild": "^0.25.0"
+  }
+}
