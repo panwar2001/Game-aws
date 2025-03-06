@@ -26,8 +26,8 @@ Resources:
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: get/
-      Handler: index.lambdaHandler
+      CodeUri: src/
+      Handler: src/handlers/get-all-data.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -44,14 +44,14 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - index.ts
+          - handlers/get-all-data.ts
 
 
   insertItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: insert/
-      Handler: index.lambdaHandler
+      CodeUri: src/
+      Handler: src/handlers/insert-data.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -68,13 +68,13 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - index.ts
+          - handlers/insert-data.ts
 
   updateItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: update/
-      Handler: index.lambdaHandler
+      CodeUri: src/
+      Handler: src/handlers/update-data.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -91,14 +91,14 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - index.ts
+          - handlers/update-data.ts
 
 
   deleteItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: delete/
-      Handler: index.lambdaHandler
+      CodeUri: src/
+      Handler: src/handlers/delete-data.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
         - x86_64
@@ -115,7 +115,7 @@ Resources:
         Target: "es2020"
         Sourcemap: true
         EntryPoints:
-          - index.ts
+          - handlers/delete-data.ts
 
 
 Outputs:
