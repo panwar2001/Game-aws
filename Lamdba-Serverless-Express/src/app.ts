@@ -1,10 +1,10 @@
 import express from 'express';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 dotenv.config();
-import { lambdaHandler as deleteHandler } from './handlers/delete-data';
-import { lambdaHandler as insertHandler } from './handlers/insert-data';
-import { lambdaHandler as updateHandler } from './handlers/update-data';
-import { lambdaHandler as getAllHandler } from './handlers/get-all-data';
+import { handler as deleteHandler } from './handlers/delete-data';
+import { handler as insertHandler } from './handlers/put-data';
+import { handler as getAllHandler } from './handlers/get-data';
+import { handler as getByIdHandler } from './handlers/get-data-by-id';
 
 const app = express();
 app.use(express.json());
@@ -23,7 +23,7 @@ const adaptLambdaHandler = (lambdaHandler: any) => async (req: express.Request, 
 };
 // Attach Lambda handlers to Express routes
 app.get('/get', adaptLambdaHandler(getAllHandler));
+app.post('/get-by-id', adaptLambdaHandler(getByIdHandler));
 app.post('/insert', adaptLambdaHandler(insertHandler));
-app.put('/update', adaptLambdaHandler(updateHandler));
 app.delete('/delete', adaptLambdaHandler(deleteHandler));
 export default app;

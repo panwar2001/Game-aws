@@ -7,23 +7,25 @@ const ddbClient = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 const tableName = process.env.TABLE_NAME!; // Ensure TABLE_NAME is set
 
-export const lambdaHandler = async (
+
+// Define the InputObject interface
+interface InputObject {
+    game_id: string;
+    player_id: string;
+}
+
+export const handler = async (
     event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
     console.info('Received event:', event);
 
-    // Validate HTTP method
-    if (event.httpMethod !== 'DELETE') {
-        return createResponse(405, {
-            error: `Method Not Allowed. Expected 'DELETE', received '${event.httpMethod}'.`
-        });
-    }
-
     // Parse and validate input
-    let inputObj;
+    let inputObj:InputObject;
     try {
         if (!event.body) throw new Error('Request body is missing.');
-        inputObj = JSON.parse(event.body);
+        inputObj = JSON.parse(event.body!); // Parsing request body
+        inputObj = typeof event.body === 'string'? JSON.parse(event.body) as InputObject: (event.body as InputObject);
+
         validateInput(inputObj);
     } catch (err: any) {
         return createResponse(400, {
@@ -43,7 +45,7 @@ export const lambdaHandler = async (
 };
 
 // Function to delete data from DynamoDB
-const deleteData = async (game_id: number, player_id: string) => {
+const deleteData = async (game_id: string, player_id: string) => {
     await ddbDocClient.send(
         new DeleteCommand({
             TableName: tableName,
@@ -54,21 +56,22 @@ const deleteData = async (game_id: number, player_id: string) => {
 };
 
 // Function to validate input attributes
-const validateInput = (input: { game_id: number; player_id: string }) => {
+const validateInput = (input: { game_id: string; player_id: string }) => {
     if (!input.game_id || !input.player_id) {
         throw new Error('Missing required attributes: game_id, player_id');
     }
 };
 
-// Helper function to create a structured API response
+// Helper function to create API response
 const createResponse = (statusCode: number, body: object): APIGatewayProxyResult => {
+    const headers = {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Origin': '*', // DO NOT USE IN PRODUCTION
+      };
     return {
-        statusCode,
-        headers: {
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Allow-Origin': '*', // DO NOT USE IN PRODUCTION
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PUT,DELETE'
-        },
-        body: JSON.stringify(body)
+        statusCode:statusCode,
+        body:JSON.stringify(body),
+        headers: headers,
     };
 };

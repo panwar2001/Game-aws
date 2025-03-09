@@ -8,23 +8,16 @@ const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 const tableName = process.env.TABLE_NAME!; // Ensure TABLE_NAME is set
 
 interface InputObject {
-    game_id: number;
+    game_id: string;
     player_id: string;
     date: string;
-    top_score: number;
+    top_score: string;
 }
 
-export const lambdaHandler = async (
+export const handler = async (
     event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> => {
     console.info('Received event:', event);
-
-    // Validate HTTP method
-    if (event.httpMethod !== 'PUT') {
-        return createResponse(405, {
-            error: `Method Not Allowed. Expected 'PUT', received '${event.httpMethod}'.`
-        });
-    }
 
     // Parse and validate input
     let inputObj: InputObject;
@@ -69,15 +62,17 @@ const validateInput = (input: InputObject) => {
     }
 };
 
-// Helper function to create a structured API response
+// Helper function to create API response
 const createResponse = (statusCode: number, body: object): APIGatewayProxyResult => {
+    const headers = {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Origin': '*', // DO NOT USE IN PRODUCTION
+      };
     return {
-        statusCode,
-        headers: {
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Allow-Origin': '*', // DO NOT USE IN PRODUCTION
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PUT'
-        },
-        body: JSON.stringify(body)
+        statusCode:statusCode,
+        body:JSON.stringify(body),
+        headers: headers,
     };
 };
+

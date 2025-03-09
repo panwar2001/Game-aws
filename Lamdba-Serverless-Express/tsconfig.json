@@ -1,27 +1,21 @@
 {
   "compilerOptions": {
-    "target": "es2020",  // Target ES2020 for modern JavaScript features
+    "target": "ES2020",  // Target ES2020 for modern JS features
+    "module": "ESNext",  // Use ESNext for ES module syntax
     "strict": true,  // Enable strict mode for better type safety
-    "preserveConstEnums": true,  // Retain const enums in the output
-    "outDir": "dist",  // Output directory for compiled files
-    "baseUrl": ".",  // The base directory for module resolution
-    "sourceMap": true,  // Generate source maps for easier debugging
-    "module": "commonjs",  // Use CommonJS module system (required for Node.js)
-    "moduleResolution": "node",  // Resolve modules using Node.js style resolution
-    "esModuleInterop": true,  // Enable interop for ES modules
+    "esModuleInterop": true,  // Ensure compatibility with CommonJS modules
     "skipLibCheck": true,  // Skip library type checks for faster compilation
-    "forceConsistentCasingInFileNames": true  // Ensure consistent casing for file names
+    "moduleResolution": "node",  // Use Node.js module resolution
+    "outDir": "dist",  // Output directory for compiled files
+    "sourceMap": true,  // Generate source maps for debugging
+    "baseUrl": ".",  // Resolve modules relative to the base directory
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": [
-    "node_modules",  // Exclude the node_modules directory
-    "dist"  // Exclude the output directory (dist)
+    "node_modules",
+    "dist"
   ],
   "include": [
-    "src/**/*.ts",  // Include all .ts files in the src folder
-    "test/**/*.spec.ts"  // Include all .spec.ts test files in the test folder
-  ],
-  "types": [
-    "jasmine",  // Include Jasmine types for tests
-    "node"  // Include Node.js types for running in a Node environment
+    "src/**/*.ts"
   ]
 }
