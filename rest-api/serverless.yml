@@ -35,7 +35,6 @@ provider:
 functions:
   index:
     handler: src/index.handler
-    memorySize:500
     events:
       - http: 
           path: /get
