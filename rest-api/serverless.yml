@@ -1,0 +1,103 @@
+org: accnture
+app: lamda-service
+service: rest-api
+stages:
+  default:
+    params:
+      tableName: score
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: us-east-1
+  timeout: 900
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ScoresTable, Arn]
+  environment:
+    TABLE_NAME: score
+
+functions:
+  api:
+    handler: src/index.handler
+    events:
+      - httpApi: "*"
+      - http:
+          path: /get
+          method: get
+          integration: lambda
+          cors: true
+      - http:
+          path: /put
+          method: post
+          integration: lambda
+          cors: true
+      - http:
+          path: /get-by-id
+          method: post
+          integration: lambda
+          cors: true
+      - http:
+          path: /delete
+          method: delete
+          integration: lambda
+          cors: true      
+
+resources:
+  Resources:
+    ScoresTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        TableName: score
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+
+
+package:
+  excludeDevDependencies: true
+  individually: true
+  exclude:
+    - node_modules/**
+    - build/**
+    - .git/**
+    - .gitignore
+    - tsconfig.json
+    - README.md
+    - gulpfile.js
+
+plugins:
+  - serverless-offline
+
+custom:
+  defaultStage: localdev
+  serverless-offline:
+    port: 8081
+  esbuild:
+    bundle: true               
+    sourcemap: true            
+    target: 'node22'           
+    platform: 'node'
+    format: 'esm'
+    external: [
+      "@aws-sdk/client-dynamodb",  
+      "@aws-sdk/lib-dynamodb"     
+    ]
+    outExtension: {".js":".mjs"}   

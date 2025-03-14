@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",  // Target ES2020 for modern JS features
+    "module": "ESNext",  // Use ESNext for ES module syntax
+    "strict": true,  // Enable strict mode for better type safety
+    "esModuleInterop": true,  // Ensure compatibility with CommonJS modules
+    "skipLibCheck": true,  // Skip library type checks for faster compilation
+    "moduleResolution": "node",  // Use Node.js module resolution
+    "outDir": "dist",  // Output directory for compiled files
+    "sourceMap": true,  // Generate source maps for debugging
+    "baseUrl": ".",  // Resolve modules relative to the base directory
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ]
+}
