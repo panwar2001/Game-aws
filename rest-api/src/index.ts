@@ -12,6 +12,7 @@ const tableName = process.env.TABLE_NAME!;
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult>  => {
   let statusCode = 200;
   let body: any;
+  console.log("Received Event: ", event);
   try {
     if (event.httpMethod === 'DELETE' && event.path === '/delete' && event.body) {
 
@@ -19,7 +20,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
          JSON.parse(event.body) as GameInputType : (event.body as GamePlayerIdType);
         
         await deleteData(inputObj.game_id, inputObj.player_id);
-        body = `Deleted item ${inputObj}`;
+        body = `Deleted item ${JSON.stringify(inputObj)}`;
         
     } else if (event.httpMethod === 'POST' && event.path === '/get-by-id' && event.body) {
         const inputObj = typeof event.body === 'string' ?
@@ -28,10 +29,10 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
         body = await getItemsByGameIdAndPlayerId(inputObj.game_id, inputObj.player_id);
     } else if (event.httpMethod === 'GET' && event.path === '/get') {
         body = await getAllItems();
-    } else if (event.httpMethod === 'POST' && event.path === '/insert' && event.body) {
+    } else if (event.httpMethod === 'POST' && event.path === '/put' && event.body) {
         const inputObj = typeof event.body === 'string' ? JSON.parse(event.body) as GameInputType : (event.body as GameInputType);
         await insertData(inputObj);
-        body = `Put item ${inputObj}`;
+        body = `Put item ${JSON.stringify(inputObj)}`;
     }
   } catch (err: any) {
     console.error('Error:', err);
@@ -54,6 +55,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
 
 
 const getAllItems = async () => {
+    console.log("tablename: ",tableName)
     const data = await dynamo.send(new ScanCommand({ TableName: tableName }));
     return data.Items || [];
 };
@@ -68,7 +70,7 @@ const insertData = async (input: GameInputType) => {
           Item: input
       })
   );
-  console.log('Success - item added or updated');
+  console.log(`Success - item added or updated: ${JSON.stringify(input)}`);
 };
 
 
@@ -80,7 +82,7 @@ const deleteData = async ( game_id: string, player_id: string) => {
           Key: { game_id, player_id }
       })
   );
-  console.log('Success - item deleted');
+  console.log(`Success - item deleted: ${JSON.stringify({"game_id":game_id,"player_id":player_id})}`);
 };
 
 

@@ -1,15 +1,20 @@
 org: accnture
 app: lamda-service
-service: rest-api
+service: http
 stages:
   default:
     params:
       tableName: score
 
+configValidationMode: error
+
+plugins:
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs22.x
-  region: us-east-1
+  region: ap-south-1
   timeout: 900
   iam:
     role:
@@ -28,29 +33,25 @@ provider:
     TABLE_NAME: score
 
 functions:
-  api:
+  index:
     handler: src/index.handler
+    memorySize:500
     events:
-      - httpApi: "*"
-      - http:
+      - http: 
           path: /get
           method: get
-          integration: lambda
           cors: true
       - http:
           path: /put
           method: post
-          integration: lambda
           cors: true
       - http:
           path: /get-by-id
           method: post
-          integration: lambda
           cors: true
       - http:
           path: /delete
           method: delete
-          integration: lambda
           cors: true      
 
 resources:
@@ -83,13 +84,12 @@ package:
     - README.md
     - gulpfile.js
 
-plugins:
-  - serverless-offline
 
 custom:
   defaultStage: localdev
   serverless-offline:
     port: 8081
+    resourceRoutes: true
   esbuild:
     bundle: true               
     sourcemap: true            

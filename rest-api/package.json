@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "npx gulp lint",
     "build": "serverless package",
-    "dev": "set tableName=score & serverless offline start -r us-east-1 --stage localdev"
+    "dev": "set tableName=score & serverless offline start -r ap-south-1 --stage localdev"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.585.0",
