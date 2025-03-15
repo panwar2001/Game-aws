@@ -1,0 +1,19 @@
+  index:
+    handler: src/index.handler
+    events:
+      - http: 
+          path: /get
+          method: get
+          cors: true
+      - http:
+          path: /put
+          method: post
+          cors: true
+      - http:
+          path: /get-by-id
+          method: post
+          cors: true
+      - http:
+          path: /delete
+          method: delete
+          cors: true

@@ -1,0 +1,16 @@
+custom:
+  defaultStage: localdev
+  serverless-offline:
+    port: 8081
+    resourceRoutes: true
+  esbuild:
+    bundle: true               
+    sourcemap: true            
+    target: 'node22'           
+    platform: 'node'
+    format: 'esm'
+    external: [
+      "@aws-sdk/client-dynamodb",  
+      "@aws-sdk/lib-dynamodb"     
+    ]
+    outExtension: {".js":".mjs"}   

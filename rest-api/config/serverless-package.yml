@@ -1,0 +1,10 @@
+  excludeDevDependencies: true
+  individually: true
+  exclude:
+    - node_modules/**
+    - build/**
+    - .git/**
+    - .gitignore
+    - tsconfig.json
+    - README.md
+    - gulpfile.js

@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "lint": "npx gulp lint",
-    "build": "serverless package",
     "dev": "set tableName=score & serverless offline start -r ap-south-1 --stage localdev"
   },
   "dependencies": {

@@ -8,95 +8,14 @@ stages:
 
 configValidationMode: error
 
-plugins:
-  - serverless-offline
+plugins:    ${file(./config/serverless-plugins.yml)}
 
-provider:
-  name: aws
-  runtime: nodejs22.x
-  region: ap-south-1
-  timeout: 900
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:Query
-            - dynamodb:Scan
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-          Resource:
-            - Fn::GetAtt: [ScoresTable, Arn]
-  environment:
-    TABLE_NAME: score
+provider:   ${file(./config/serverless-provider.yml)}
+      
+functions:  ${file(./config/serverless-functions.yml)}
 
-functions:
-  index:
-    handler: src/index.handler
-    events:
-      - http: 
-          path: /get
-          method: get
-          cors: true
-      - http:
-          path: /put
-          method: post
-          cors: true
-      - http:
-          path: /get-by-id
-          method: post
-          cors: true
-      - http:
-          path: /delete
-          method: delete
-          cors: true      
+resources:  ${file(./config/serverless-resources.yml)}
 
-resources:
-  Resources:
-    ScoresTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        TableName: score
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+package:    ${file(./config/serverless-package.yml)}
 
-
-
-package:
-  excludeDevDependencies: true
-  individually: true
-  exclude:
-    - node_modules/**
-    - build/**
-    - .git/**
-    - .gitignore
-    - tsconfig.json
-    - README.md
-    - gulpfile.js
-
-
-custom:
-  defaultStage: localdev
-  serverless-offline:
-    port: 8081
-    resourceRoutes: true
-  esbuild:
-    bundle: true               
-    sourcemap: true            
-    target: 'node22'           
-    platform: 'node'
-    format: 'esm'
-    external: [
-      "@aws-sdk/client-dynamodb",  
-      "@aws-sdk/lib-dynamodb"     
-    ]
-    outExtension: {".js":".mjs"}   
+custom:     ${file(./config/serverless-custom.yml)}
