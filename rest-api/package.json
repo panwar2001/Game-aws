@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "build":"gulp",
     "lint": "npx gulp lint",
     "dev": "set tableName=score & serverless offline start -r ap-south-1 --stage localdev"
   },

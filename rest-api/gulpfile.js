@@ -15,7 +15,7 @@ const lambdaFunctions = fs.readdirSync('src')
 
 // Clean output directories
 task("clean", function () {
-    return deleteAsync(["zips/**", "build/**"]);
+    return deleteAsync(["zip/**","undefined/**"]);
 });
 
 // Lint src folder and fix code
@@ -26,15 +26,6 @@ task('lint', async ()=> {
                       .pipe(dest('src/'))
 });
 
-
-// // Gulp task which will create zip file for all the environments specified in the config folder.
-// task('package' , async ()=> {
-//     const shell = require('shelljs');
-//     shell('npm run package', function ( _, stdout, _) {
-//            console.log('Completed serverless package');
-//            console.log(stdout);
-//     });
-// });
 
 // Bundle TypeScript files using esbuild
 task("bundle", async ()=> {
@@ -51,10 +42,10 @@ task("bundle", async ()=> {
             ],
             outExtension: {".js":".mjs"}
         }))
-        .pipe(dest("build"));
+        .pipe(zip('src.zip'))
+        .pipe(dest("zip"));
 });
 
 
-// const build = series("lint","clean", "bundle","zip_packages");
-const build = series("bundle")
+const build = series("clean", "bundle");
 task("default", build);
